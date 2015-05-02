@@ -11,6 +11,6 @@ func main() {
 	db := mysql.Open()
 	defer mysql.Close(db)
 
-	http.HandleFunc("/", action.Handler)
+	http.HandleFunc("/action/", action.Handler)
 	http.ListenAndServe(":8080", nil)
 }
