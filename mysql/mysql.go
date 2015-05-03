@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"database/sql"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -18,7 +19,7 @@ func Open() error {
 }
 
 func openDataBase() (*sql.DB, error) {
-	db, err := sql.Open("mysql", "root:@/")
+	db, err := sql.Open("mysql", "root:@"+os.Getenv("DB_PORT_3306_TCP_PROTO")+os.Getenv("DB_PORT_3306_TCP_ADDR")+":"+os.Getenv("DB_PORT_3306_TCP_PORT")+"/"+os.Getenv("DB_NAME"))
 	if err != nil {
 		return nil, err
 	}
