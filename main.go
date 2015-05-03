@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"./actions"
@@ -24,5 +25,7 @@ func main() {
 	//v, _ := memcache.Get("key", mc)
 
 	http.HandleFunc("/actions/", actions.Handler)
+
+	log.Println("Start ListenAndServe :8080")
 	http.ListenAndServe(":8080", nil)
 }
