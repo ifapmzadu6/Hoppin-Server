@@ -21,7 +21,7 @@ func main() {
 	mc := memcache.Open()
 	memcache.Set("value", "key", mc)
 
-	v, _ := memcache.Get("key", mc)
+	//v, _ := memcache.Get("key", mc)
 
 	http.HandleFunc("/actions/", actions.Handler)
 	http.ListenAndServe(":8080", nil)
