@@ -62,7 +62,7 @@ func createDataBase(db *sql.DB) error {
 
 func createActionTable(db *sql.DB) error {
 	var sql = `
-	CREATE TABLE IF NOT EXISTS action (
+	CREATE TABLE IF NOT EXISTS actions (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		video_id CHAR(32) UNIQUE NOT NULL,
 		type INT UNSIGNED NOT NULL REFERENCES action_type(id),
@@ -81,7 +81,7 @@ func createActionTable(db *sql.DB) error {
 
 func createActionTypeTable(db *sql.DB) error {
 	var sql = `
-	CREATE TABLE IF NOT EXISTS action_type (
+	CREATE TABLE IF NOT EXISTS action_types (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		string CHAR(32) UNIQUE NOT NULL
 	) DEFAULT CHARACTER SET utf8;`
@@ -98,7 +98,7 @@ func InsertAction(a Action) error {
 }
 
 func insertAction(db *sql.DB, a Action) error {
-	var sql = "INSERT INTO action (video_id, type, time, start, end) value (?, ?, ?, ?, ?)"
+	var sql = "INSERT INTO actions (video_id, type, time, start, end) value (?, ?, ?, ?, ?)"
 
 	_, err := db.Exec(sql, a.VideoId, a.Type.Id, a.Time, a.Start, a.End)
 	if err != nil {

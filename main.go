@@ -1,10 +1,9 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
-	"./action"
+	"./actions"
 	"./memcache"
 	"./mysql"
 )
@@ -23,8 +22,7 @@ func main() {
 	memcache.Set("value", "key", mc)
 
 	v, _ := memcache.Get("key", mc)
-	log.Println(v)
 
-	http.HandleFunc("/actions/", action.Handler)
+	http.HandleFunc("/actions/", actions.Handler)
 	http.ListenAndServe(":8080", nil)
 }

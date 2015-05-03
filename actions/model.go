@@ -1,4 +1,4 @@
-package action
+package actions
 
 type Actions struct {
 	Actions []Action `json:"actions"`
