@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"./actions"
+	"./memcache"
+	"./mysql"
 )
 
 func main() {
