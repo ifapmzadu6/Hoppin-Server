@@ -6,23 +6,35 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func Open() (*sql.DB, error) {
+var db *sql.DB
+
+func Open() error {
+	tdb, err := openDataBase()
+	if err != nil {
+		return err
+	}
+	db = tdb
+	return nil
+}
+
+func openDataBase() (*sql.DB, error) {
 	db, err := sql.Open("mysql", "root:@/")
 	if err != nil {
 		return nil, err
 	}
-	err = CreateDataBase(db)
+
+	err = createDataBase(db)
 	if err != nil {
 		return nil, err
 	}
 	db.Exec("USE hoppin")
 
-	err = CreateActionTable(db)
+	err = createActionTable(db)
 	if err != nil {
 		return nil, err
 	}
 
-	err = CreateActionTypeTable(db)
+	err = createActionTypeTable(db)
 	if err != nil {
 		return nil, err
 	}
@@ -30,11 +42,15 @@ func Open() (*sql.DB, error) {
 	return db, nil
 }
 
-func Close(db *sql.DB) {
-	db.Close()
+func Close() error {
+	return closeDataBase(db)
 }
 
-func CreateDataBase(db *sql.DB) error {
+func closeDataBase(db *sql.DB) error {
+	return db.Close()
+}
+
+func createDataBase(db *sql.DB) error {
 	var sql = "CREATE DATABASE IF NOT EXISTS hoppin DEFAULT CHARACTER SET utf8;"
 
 	_, err := db.Exec(sql)
@@ -44,7 +60,7 @@ func CreateDataBase(db *sql.DB) error {
 	return nil
 }
 
-func CreateActionTable(db *sql.DB) error {
+func createActionTable(db *sql.DB) error {
 	var sql = `
 	CREATE TABLE IF NOT EXISTS action (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -63,7 +79,7 @@ func CreateActionTable(db *sql.DB) error {
 	return nil
 }
 
-func CreateActionTypeTable(db *sql.DB) error {
+func createActionTypeTable(db *sql.DB) error {
 	var sql = `
 	CREATE TABLE IF NOT EXISTS action_type (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -77,7 +93,11 @@ func CreateActionTypeTable(db *sql.DB) error {
 	return nil
 }
 
-func InsertAction(db *sql.DB, a Action) error {
+func InsertAction(a Action) error {
+	return insertAction(db, a)
+}
+
+func insertAction(db *sql.DB, a Action) error {
 	var sql = "INSERT INTO action (video_id, type, time, start, end) value (?, ?, ?, ?, ?)"
 
 	_, err := db.Exec(sql, a.VideoId, a.Type.Id, a.Time, a.Start, a.End)

@@ -10,11 +10,14 @@ import (
 )
 
 func main() {
-	db, _ := mysql.Open()
+	err := mysql.Open()
+	if err != nil {
+		panic(err)
+	}
 	at := mysql.ActionType{String: "twitter"}
 	a := mysql.Action{VideoId: "VideoId", Type: at, Time: 100, Start: 20, End: 30}
-	mysql.InsertAction(db, a)
-	defer mysql.Close(db)
+	mysql.InsertAction(a)
+	defer mysql.Close()
 
 	mc := memcache.Open()
 	memcache.Set("value", "key", mc)
@@ -22,6 +25,6 @@ func main() {
 	v, _ := memcache.Get("key", mc)
 	log.Println(v)
 
-	http.HandleFunc("/action/", action.Handler)
+	http.HandleFunc("/actions/", action.Handler)
 	http.ListenAndServe(":8080", nil)
 }
