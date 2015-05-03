@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	db := mysql.Open()
+	db, _ := mysql.Open()
 	defer mysql.Close(db)
 
 	mc := memcache.Open()
