@@ -14,10 +14,9 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	var object Actions
 	err := decoder.Decode(&object)
 	if err != nil {
-		panic(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
-	//log.Println(object.VideoId)
-	//log.Println(object.Start)
 
 	log.Println(object)
 }

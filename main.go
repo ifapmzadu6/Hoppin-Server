@@ -9,22 +9,6 @@ import (
 	"./mysql"
 )
 
-/*
- 15 type Action struct {
-	  16     Id      int
-	   17     VideoId string
-	    18     Type    ActionType
-		 19     Time    int
-		  20     Start   int
-		   21     End     int
-		    22 }
-			 23
-			  24 type ActionType struct {
-				   25     Id     int
-				    26     String string
-					 27 }
-*/
-
 func main() {
 	db, _ := mysql.Open()
 	at := mysql.ActionType{String: "twitter"}
