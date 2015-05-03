@@ -15,6 +15,7 @@ func Open() (*sql.DB, error) {
 	db.Exec("USE hoppin")
 
 	CreateActionTable(db)
+	CreateActionTypeTable(db)
 
 	return db, nil
 }
@@ -22,21 +23,6 @@ func Open() (*sql.DB, error) {
 func Close(db *sql.DB) {
 	db.Close()
 }
-
-/*
-type Action struct {
-	Id      int
-	VideoId string
-	Type    ActionType
-	Time    uint16
-	Start   uint16
-	End     uint16
-}
-type ActionType struct {
-    Id     int
-    String string
-}
-*/
 
 func CreateDataBase(db *sql.DB) {
 	var sql = "CREATE DATABASE IF NOT EXISTS hoppin DEFAULT CHARACTER SET utf8;"
@@ -67,7 +53,10 @@ func CreateActionTable(db *sql.DB) {
 
 func CreateActionTypeTable(db *sql.DB) {
 	var sql = `
-	`
+	CREATE TABLE IF NOT EXISTS action_type (
+		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+		string CHAR(32) UNIQUE NOT NULL
+	) DEFAULT CHARACTER SET utf8;`
 
 	_, err := db.Exec(sql)
 	if err != nil {
@@ -75,8 +64,11 @@ func CreateActionTypeTable(db *sql.DB) {
 	}
 }
 
-func InsertAction(a *Action) {
-	//var sql = "INSERT INTO video (id, videoId, type, time, start, end) value (?, ?, ?, ?)"
+func InsertAction(db *sql.DB, a Action) {
+	var sql = "INSERT INTO action (video_id, type, time, start, end) value (?, ?, ?, ?, ?)"
 
-	//db.Exec(sql, Action.VideoId, Action.Type, Action.Time, Action.Start, Action.End)
+	_, err := db.Exec(sql, a.VideoId, a.Type.Id, a.Time, a.Start, a.End)
+	if err != nil {
+		panic(err)
+	}
 }
