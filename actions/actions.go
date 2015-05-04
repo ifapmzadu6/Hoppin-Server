@@ -12,16 +12,16 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	var as Actions
 	err := decoder.Decode(&as)
 	if err != nil {
-		http.Error(w, err.String(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	for i, a := range as.Actions {
+	for _, a := range as.Actions {
 		nat := mysql.ActionType{String: a.Type}
 		na := mysql.Action{VideoId: a.VideoId, Type: nat, Time: a.Time, Start: a.Start, End: a.End}
 		err = mysql.InsertAction(na)
 		if err != nil {
-			http.Error(w, err.String(), http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 	}
