@@ -28,8 +28,8 @@ func main() {
 	http.HandleFunc("/", index.Handler)
 	http.HandleFunc("/actions/", actions.Handler)
 
-	if os.Getenv("DEBUG") != "" {
-		err = http.ListenAndServeTLS(":8080", "/ssl/cert.pem", "/ssl/key.pem", nil)
+	if os.Getenv("DEBUG") == "1" {
+		err = http.ListenAndServe(":8080", nil)
 		if err != nil {
 			log.Fatal(err)
 		}
