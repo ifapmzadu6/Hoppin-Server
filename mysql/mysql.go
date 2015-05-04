@@ -65,7 +65,7 @@ func createActionTable(db *sql.DB) error {
 	var sql = `
 	CREATE TABLE IF NOT EXISTS actions (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
-		video_id CHAR(32) UNIQUE NOT NULL,
+		video_id CHAR(32) NOT NULL,
 		type INT UNSIGNED NOT NULL REFERENCES action_type(id),
 		time INT UNSIGNED NOT NULL,
 		start INT UNSIGNED NOT NULL,
