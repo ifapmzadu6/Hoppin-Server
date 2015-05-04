@@ -7,6 +7,8 @@ import (
 
 	"./actions"
 	"./index"
+	"./memcache"
+	"./mysql"
 )
 
 func main() {
