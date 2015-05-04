@@ -36,7 +36,10 @@ func main() {
 	}
 
 	log.Println("Start ListenAndServe :8080")
-	http.ListenAndServeTLS(":8080", "/ssl/cert.pem", "/ssl/key.pem", nil)
+	err = http.ListenAndServeTLS(":8080", "/ssl/cert.pem", "/ssl/key.pem", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func Exists(filename string) bool {
