@@ -28,17 +28,24 @@ func main() {
 	http.HandleFunc("/", index.Handler)
 	http.HandleFunc("/actions/", actions.Handler)
 
-	if Exists("/ssl/cert.pem") == false {
-		panic("/ssl/cert.pem is not exists.")
-	}
-	if Exists("/ssl/key.pem") == false {
-		panic("/ssl/key.pem is not exists.")
-	}
+	if os.Getenv("DEBUG") == "1" {
+		err = http.ListenAndServeTLS(":8080", "/ssl/cert.pem", "/ssl/key.pem", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		if Exists("/ssl/cert.pem") == false {
+			panic("/ssl/cert.pem is not exists.")
+		}
+		if Exists("/ssl/key.pem") == false {
+			panic("/ssl/key.pem is not exists.")
+		}
 
-	log.Println("Start ListenAndServe :8080")
-	err = http.ListenAndServeTLS(":8080", "/ssl/cert.pem", "/ssl/key.pem", nil)
-	if err != nil {
-		log.Fatal(err)
+		log.Println("Start ListenAndServe :8080")
+		err = http.ListenAndServeTLS(":8080", "/ssl/cert.pem", "/ssl/key.pem", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
