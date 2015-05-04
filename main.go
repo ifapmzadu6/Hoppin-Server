@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"./actions"
+	"./index"
 	"./memcache"
 	"./mysql"
 )
@@ -24,6 +25,7 @@ func main() {
 
 	//v, _ := memcache.Get("key", mc)
 
+	http.HandleFunc("/", index.Handler)
 	http.HandleFunc("/actions/", actions.Handler)
 
 	log.Println("Start ListenAndServe :8080")
