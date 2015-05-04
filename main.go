@@ -29,5 +29,5 @@ func main() {
 	http.HandleFunc("/actions/", actions.Handler)
 
 	log.Println("Start ListenAndServe :8080")
-	http.ListenAndServeTLS(":8080", "~/cert.pem", "~/key.pem", nil)
+	http.ListenAndServeTLS(":8080", "~/ssl/cert.pem", "~/ssl/key.pem", nil)
 }
