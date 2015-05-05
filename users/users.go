@@ -1,7 +1,6 @@
 package users
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -17,6 +16,6 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "{\"user\":"+strconv.FormatInt(id, 10)+", \"password\":"+password+"}")
 	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte("{\"user\":" + strconv.FormatInt(id, 10) + ", \"password\":" + password + "}"))
 }
