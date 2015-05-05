@@ -2,6 +2,7 @@ package actions
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"../mysql"
@@ -25,4 +26,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+
+	fmt.Fprintf(w, "{\"message\":\"success\"}")
 }
