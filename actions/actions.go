@@ -27,5 +27,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	fmt.Fprintf(w, "{\"message\":\"success\"}")
+	fmt.Fprintf(w, "{\"status\":\"success\"}")
 }
