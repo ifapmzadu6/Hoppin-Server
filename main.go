@@ -27,8 +27,8 @@ func main() {
 	//v, _ := memcache.Get("key", mc)
 
 	http.HandleFunc("/", index.Handler)
-	http.HandleFunc("/actions/", actions.Handler)
-	http.HandleFunc("/users/signup/", users.SignUpHandler)
+	http.HandleFunc("/actions", actions.Handler)
+	http.HandleFunc("/users/signup", users.SignUpHandler)
 
 	if os.Getenv("DEBUG") == "1" {
 		err = http.ListenAndServe(":8080", nil)
