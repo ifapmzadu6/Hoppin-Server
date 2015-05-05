@@ -28,4 +28,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintf(w, "{\"status\":\"success\"}")
+	w.Header().Set("Content-Type", "application/json")
 }
