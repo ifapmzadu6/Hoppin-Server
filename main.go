@@ -9,6 +9,7 @@ import (
 	"./index"
 	"./memcache"
 	"./mysql"
+	"./users"
 )
 
 func main() {
@@ -27,6 +28,7 @@ func main() {
 
 	http.HandleFunc("/", index.Handler)
 	http.HandleFunc("/actions/", actions.Handler)
+	http.HandleFunc("/users/", users.Handler)
 
 	if os.Getenv("DEBUG") == "1" {
 		err = http.ListenAndServe(":8080", nil)

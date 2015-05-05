@@ -7,14 +7,14 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var db *sql.DB
+var sharedDB *sql.DB
 
 func Open() error {
-	tdb, err := openDataBase()
+	db, err := openDataBase()
 	if err != nil {
 		return err
 	}
-	db = tdb
+	sharedDB = db
 	return nil
 }
 
@@ -40,11 +40,15 @@ func openDataBase() (*sql.DB, error) {
 		return nil, err
 	}
 
+	if err := createUsersTable(db); err != nil {
+		return nil, err
+	}
+
 	return db, nil
 }
 
 func Close() error {
-	return closeDataBase(db)
+	return closeDataBase(sharedDB)
 }
 
 func closeDataBase(db *sql.DB) error {

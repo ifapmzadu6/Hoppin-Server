@@ -2,6 +2,20 @@ package mysql
 
 import "database/sql"
 
+type Action struct {
+	Id      int
+	VideoId string
+	Type    ActionType
+	Time    int
+	Start   int
+	End     int
+}
+
+type ActionType struct {
+	Id     int
+	String string
+}
+
 func createActionTable(db *sql.DB) error {
 	var sql = `
 	CREATE TABLE IF NOT EXISTS actions (
@@ -36,7 +50,7 @@ func createActionTypeTable(db *sql.DB) error {
 }
 
 func InsertAction(a Action) error {
-	return insertAction(db, a)
+	return insertAction(sharedDB, a)
 }
 
 func insertAction(db *sql.DB, a Action) error {
