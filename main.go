@@ -31,8 +31,8 @@ func main() {
 
 	// Routing
 	http.HandleFunc("/", index.Handler)
-	http.HandleFunc("/actions/", actions.Handler)
-	http.HandleFunc("/users/signup/", users.SignUpHandler)
+	http.HandleFunc("/actions", actions.Handler)
+	http.HandleFunc("/users/signup", users.SignUpHandler)
 
 	// Listen
 	if os.Getenv("DEBUG") == "1" {
