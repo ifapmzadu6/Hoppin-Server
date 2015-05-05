@@ -21,16 +21,16 @@ func createUsersTable(db *sql.DB) error {
 	return nil
 }
 
-func InsertUser(password string) error {
+func InsertUser(password string) (int64, error) {
 	return insertUser(sharedDB, password)
 }
 
-func insertUser(db *sql.DB, password string) (id, error) {
+func insertUser(db *sql.DB, password string) (int64, error) {
 	var sql = "INSERT INTO users (password) value (?)"
 
 	r, err := db.Exec(sql, password)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	return r.LastInsertId()
 }

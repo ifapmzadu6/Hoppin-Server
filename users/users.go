@@ -3,6 +3,7 @@ package users
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"../mysql"
 )
@@ -16,6 +17,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintf(w, "{\"user\":"+Itoa(id)+", \"password\":"+password+"}")
+	fmt.Fprintf(w, "{\"user\":"+strconv.FormatInt(id, 10)+", \"password\":"+password+"}")
 	w.Header().Set("Content-Type", "application/json")
 }
