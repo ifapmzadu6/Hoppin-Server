@@ -8,6 +8,10 @@ import (
 )
 
 func SignUpHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.NotFound(w, r)
+	}
+
 	password := "password"
 
 	id, err := mysql.InsertUser(password)

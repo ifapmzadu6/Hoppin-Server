@@ -13,6 +13,8 @@ import (
 )
 
 func main() {
+
+	// MySQL
 	err := mysql.Open()
 	if err != nil {
 		panic(err)
@@ -22,14 +24,17 @@ func main() {
 	mysql.InsertAction(a)
 	defer mysql.Close()
 
+	// Memcahced
 	mc := memcache.Open()
 	memcache.Set("value", "key", mc)
 	//v, _ := memcache.Get("key", mc)
 
+	// Routing
 	http.HandleFunc("/", index.Handler)
 	http.HandleFunc("/actions/", actions.Handler)
 	http.HandleFunc("/users/signup/", users.SignUpHandler)
 
+	// Listen
 	if os.Getenv("DEBUG") == "1" {
 		err = http.ListenAndServe(":8080", nil)
 		if err != nil {
@@ -41,9 +46,5 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-}
 
-func Exists(filename string) bool {
-	_, err := os.Stat(filename)
-	return err == nil
 }
