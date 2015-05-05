@@ -8,7 +8,7 @@ import (
 	"../mysql"
 )
 
-func Handler(w http.ResponseWriter, r *http.Request) {
+func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	password := "password"
 
 	id, err := mysql.InsertUser(password)
