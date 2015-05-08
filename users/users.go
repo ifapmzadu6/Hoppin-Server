@@ -1,6 +1,9 @@
 package users
 
 import (
+	"crypto/rand"
+	"encoding/base32"
+	"io"
 	"net/http"
 	"strconv"
 
@@ -12,7 +15,13 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 	}
 
-	password := "password"
+	b := make([]byte, 32)
+	_, errt := io.ReadFull(rand.Reader, b)
+	if errt != nil {
+		http.Error(w, errt.Error(), http.StatusInternalServerError)
+		return
+	}
+	password := base32.StdEncoding.EncodeToString(b)
 
 	id, err := mysql.InsertUser(password)
 	if err != nil {
