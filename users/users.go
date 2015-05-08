@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"../mysql"
 )
@@ -21,7 +22,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, errt.Error(), http.StatusInternalServerError)
 		return
 	}
-	password := base32.StdEncoding.EncodeToString(b)
+	password := strings.TrimRight(base32.StdEncoding.EncodeToString(b), "=")
 
 	id, err := mysql.InsertUser(password)
 	if err != nil {
