@@ -16,7 +16,6 @@ func createUsersTable(db *sql.DB) error {
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		password CHAR(32) NOT NULL
 	) DEFAULT CHARACTER SET utf8;`
-
 	_, err := db.Exec(sql)
 	if err != nil {
 		return err
@@ -30,7 +29,6 @@ func InsertUser(password string) (int64, error) {
 
 func insertUser(db *sql.DB, password string) (int64, error) {
 	var sql = "INSERT INTO users (password) value (?)"
-
 	r, err := db.Exec(sql, password)
 	if err != nil {
 		return 0, err
@@ -44,7 +42,6 @@ func SelectUser(id int) (string, error) {
 
 func selectUser(db *sql.DB, id int) (string, error) {
 	var sql = "SELECT password FROM users WHERE id = ? LIMIT 1"
-
 	var password string
 	err := db.QueryRow(sql, id).Scan(&password)
 	if err != nil {
@@ -67,7 +64,6 @@ func ValidateUser(id int, password string) error {
 
 func validateUser(db *sql.DB, id int, password string) error {
 	var sql = "SELECT id FROM users WHERE id = ? AND password = ?"
-
 	var tid int
 	err := db.QueryRow(sql, id, password).Scan(&tid)
 	if err != nil {

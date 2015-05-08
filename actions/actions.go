@@ -29,7 +29,21 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, a := range as.Actions {
-		nat := mysql.ActionType{String: a.Type}
+		var natnid int64
+		var err error
+		natid, err := mysql.SelectActionTypeByName(a.Type)
+		if err != nil {
+			tnatnid, natnerr := mysql.InsertActionType(a.Type)
+			if natnerr != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			natnid = tnatnid
+		} else {
+			natnid = int64(natid)
+		}
+
+		nat := mysql.ActionType{Id: natnid, Name: a.Type}
 		na := mysql.Action{VideoId: a.VideoId, Type: nat, Time: a.Time, Start: a.Start, End: a.End}
 		userId, _ := strconv.Atoi(id)
 		err = mysql.InsertAction(na, userId)
