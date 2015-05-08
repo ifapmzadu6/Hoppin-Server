@@ -19,9 +19,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	at := mysql.ActionType{String: "twitter"}
-	a := mysql.Action{VideoId: "VideoId", Type: at, Time: 100, Start: 20, End: 30}
-	mysql.InsertAction(a)
 	defer mysql.Close()
 
 	// Memcahced

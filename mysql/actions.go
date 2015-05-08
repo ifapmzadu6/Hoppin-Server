@@ -9,6 +9,7 @@ type Action struct {
 	Time    int
 	Start   int
 	End     int
+	UserId  int
 }
 
 type ActionType struct {
@@ -25,6 +26,7 @@ func createActionTable(db *sql.DB) error {
 		time INT UNSIGNED NOT NULL,
 		start INT UNSIGNED NOT NULL,
 		end INT UNSIGNED NOT NULL,
+		user_id INT UNSIGNED NOT NULL REFERENCES users(id),
 		INDEX(video_id)
 	) DEFAULT CHARACTER SET utf8;`
 
@@ -49,12 +51,12 @@ func createActionTypeTable(db *sql.DB) error {
 	return nil
 }
 
-func InsertAction(a Action) error {
-	return insertAction(sharedDB, a)
+func InsertAction(a Action, userId int) error {
+	return insertAction(sharedDB, a, userId)
 }
 
-func insertAction(db *sql.DB, a Action) error {
-	var sql = "INSERT INTO actions (video_id, type, time, start, end) value (?, ?, ?, ?, ?)"
+func insertAction(db *sql.DB, a Action, userId int) error {
+	var sql = "INSERT INTO actions (video_id, type, time, start, end, user_id) value (?, ?, ?, ?, ?, ?)"
 
 	_, err := db.Exec(sql, a.VideoId, a.Type.Id, a.Time, a.Start, a.End)
 	if err != nil {
