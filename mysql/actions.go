@@ -58,7 +58,7 @@ func InsertAction(a Action, userId int) error {
 func insertAction(db *sql.DB, a Action, userId int) error {
 	var sql = "INSERT INTO actions (video_id, type, time, start, end, user_id) value (?, ?, ?, ?, ?, ?)"
 
-	_, err := db.Exec(sql, a.VideoId, a.Type.Id, a.Time, a.Start, a.End)
+	_, err := db.Exec(sql, a.VideoId, a.Type.Id, a.Time, a.Start, a.End, userId)
 	if err != nil {
 		return err
 	}
