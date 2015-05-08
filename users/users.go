@@ -15,7 +15,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 	}
 
-	b := make([]byte, 32)
+	b := make([]byte, 16)
 	_, errt := io.ReadFull(rand.Reader, b)
 	if errt != nil {
 		http.Error(w, errt.Error(), http.StatusInternalServerError)
