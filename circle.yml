@@ -10,6 +10,7 @@ dependencies:
         - sudo apt-get update
         - wget --no-verbose https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz
         - sudo tar -C /usr/local -xzf go1.4.2.linux-amd64.tar.gz
+        - sudo ln -s /usr/local/go/bin/go /usr/bin/go
         - sudo go get github.com/bradfitz/gomemcache/memcache
         - sudo go get github.com/go-sql-driver/mysql
 
