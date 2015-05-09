@@ -5,8 +5,6 @@ machine:
 
 dependencies:
     pre:
-        - sudo apt-get update
-        - ln -s ~/Hoppin-Server /home/ubuntu/.go_project/src/github.com/ifapmzadu6/Hoppin-Server
         - go get github.com/bradfitz/gomemcache/memcache
         - go get github.com/go-sql-driver/mysql
 
