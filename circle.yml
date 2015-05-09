@@ -1,7 +1,6 @@
 machine:
     environment:
         DEBUG: 1
-        GOPATH: $HOME/$CIRCLE_PROJECT_REPONAME
 
 dependencies:
     pre:
