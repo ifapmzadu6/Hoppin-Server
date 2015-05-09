@@ -1,0 +1,13 @@
+machine:
+    environment:
+        DEBUG: test
+
+dependencies:
+    pre:
+        - sudo apt-get update
+        - go get github.com/bradfitz/gomemcache/memcache
+        - go get github.com/go-sql-driver/mysql
+
+notify:
+      webhooks:
+          - url: https://hoppin.tokyo/endpoint
