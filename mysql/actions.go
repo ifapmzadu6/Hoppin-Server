@@ -96,9 +96,9 @@ func SelectActionTypeByName(name string) (int, error) {
 }
 
 func selectActionTypeByName(db *sql.DB, name string) (int, error) {
-	var sql = "SELECT name FROM action_types WHERE id = ? LIMIT 1"
+	var sql = "SELECT id FROM action_types WHERE name = ? LIMIT 1"
 	var id int
-	err := db.QueryRow(sql, id).Scan(&id)
+	err := db.QueryRow(sql, name).Scan(&id)
 	if err != nil {
 		return -1, err
 	}
