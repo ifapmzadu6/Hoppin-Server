@@ -33,7 +33,6 @@ func openDataBase() (*sql.DB, error) {
 	if err := createDataBase(db); err != nil {
 		return nil, err
 	}
-
 	if _, err := db.Exec("USE hoppin"); err != nil {
 		return nil, err
 	}
@@ -41,15 +40,12 @@ func openDataBase() (*sql.DB, error) {
 	if err := createActionTable(db); err != nil {
 		return nil, err
 	}
-
 	if err := createActionTypeTable(db); err != nil {
 		return nil, err
 	}
-
 	if err := createUsersTable(db); err != nil {
 		return nil, err
 	}
-
 	if err := createUserDevicesTable(db); err != nil {
 		return nil, err
 	}
