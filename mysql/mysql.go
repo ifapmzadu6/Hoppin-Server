@@ -24,23 +24,27 @@ func openDataBase() (*sql.DB, error) {
 		return nil, err
 	}
 
-	err = createDataBase(db)
-	if err != nil {
-		return nil, err
-	}
-	db.Exec("USE hoppin")
-
-	err = createActionTable(db)
-	if err != nil {
+	if err := createDataBase(db); err != nil {
 		return nil, err
 	}
 
-	err = createActionTypeTable(db)
-	if err != nil {
+	if _, err := db.Exec("USE hoppin"); err != nil {
+		return nil, err
+	}
+
+	if err := createActionTable(db); err != nil {
+		return nil, err
+	}
+
+	if err := createActionTypeTable(db); err != nil {
 		return nil, err
 	}
 
 	if err := createUsersTable(db); err != nil {
+		return nil, err
+	}
+
+	if err := createUserDevicesTable(db); err != nil {
 		return nil, err
 	}
 

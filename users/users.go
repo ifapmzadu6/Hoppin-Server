@@ -16,6 +16,18 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 	}
 
+	device := r.URL.Query().Get("device")
+	os := r.URL.Query().Get("os")
+	udid, err := mysql.SelectUserDevice(device, os)
+	if err != nil {
+		nudid, err := mysql.InsertUserDevice(device, os)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		udid = nudid
+	}
+
 	b := make([]byte, 16)
 	_, errt := io.ReadFull(rand.Reader, b)
 	if errt != nil {
@@ -24,9 +36,9 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	password := strings.TrimRight(base32.StdEncoding.EncodeToString(b), "=")
 
-	id, err := mysql.InsertUser(password)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	id, erriu := mysql.InsertUser(password, udid)
+	if erriu != nil {
+		http.Error(w, erriu.Error(), http.StatusInternalServerError)
 		return
 	}
 
