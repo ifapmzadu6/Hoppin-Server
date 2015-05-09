@@ -63,7 +63,7 @@ func ValidateUser(id int, password string) error {
 }
 
 func validateUser(db *sql.DB, id int, password string) error {
-	var sql = "SELECT id FROM users WHERE id = ? AND password = ?"
+	var sql = "SELECT id FROM users WHERE id = ? AND password = ? LIMIT 1"
 	var tid int
 	err := db.QueryRow(sql, id, password).Scan(&tid)
 	if err != nil {

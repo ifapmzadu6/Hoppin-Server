@@ -69,7 +69,7 @@ func InsertActionType(name string) (int64, error) {
 }
 
 func insertActionType(db *sql.DB, name string) (int64, error) {
-	var sql = "INSERT INTO action_types (name) value (?) RETURNING id"
+	var sql = "INSERT INTO action_types (name) value (?)"
 	r, err := db.Exec(sql, name)
 	if err != nil {
 		return 0, err
@@ -82,7 +82,7 @@ func SelectActionTypeById(id int) (string, error) {
 }
 
 func selectActionTypeById(db *sql.DB, id int) (string, error) {
-	var sql = "SELECT name FROM action_types WHERE id = ?"
+	var sql = "SELECT name FROM action_types WHERE id = ? LIMIT 1"
 	var name string
 	err := db.QueryRow(sql, id).Scan(&name)
 	if err != nil {
@@ -96,7 +96,7 @@ func SelectActionTypeByName(name string) (int, error) {
 }
 
 func selectActionTypeByName(db *sql.DB, name string) (int, error) {
-	var sql = "SELECT name FROM action_types WHERE id = ?"
+	var sql = "SELECT name FROM action_types WHERE id = ? LIMIT 1"
 	var id int
 	err := db.QueryRow(sql, id).Scan(&id)
 	if err != nil {

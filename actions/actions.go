@@ -35,7 +35,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			tnatnid, natnerr := mysql.InsertActionType(a.Type)
 			if natnerr != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
+				http.Error(w, natnerr.Error(), http.StatusBadRequest)
 				return
 			}
 			natnid = tnatnid
