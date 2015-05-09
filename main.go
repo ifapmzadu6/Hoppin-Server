@@ -7,7 +7,6 @@ import (
 
 	"./actions"
 	"./index"
-	"./memcache"
 	"./mysql"
 	"./users"
 )
@@ -20,11 +19,6 @@ func main() {
 		panic(err)
 	}
 	defer mysql.Close()
-
-	// Memcahced
-	mc := memcache.Open()
-	//memcache.Set("value", "key", mc)
-	//v, _ := memcache.Get("key", mc)
 
 	// Routing
 	http.HandleFunc("/", index.Handler)
