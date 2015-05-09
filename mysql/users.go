@@ -10,7 +10,7 @@ func createUsersTable(db *sql.DB) error {
 	CREATE TABLE IF NOT EXISTS users (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		password CHAR(32) NOT NULL,
-		device INT UNSIGNED REFERENCES user_devices(id)
+		device INT UNSIGNED REFERENCES user_devices(id),
 		INDEX(password)
 	) DEFAULT CHARACTER SET utf8;`
 	_, err := db.Exec(sql)
