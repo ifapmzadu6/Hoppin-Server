@@ -23,7 +23,7 @@ func main() {
 
 	// Memcahced
 	mc := memcache.Open()
-	memcache.Set("value", "key", mc)
+	//memcache.Set("value", "key", mc)
 	//v, _ := memcache.Get("key", mc)
 
 	// Routing
