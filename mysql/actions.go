@@ -41,7 +41,8 @@ func createActionTypeTable(db *sql.DB) error {
 	var sql = `
 	CREATE TABLE IF NOT EXISTS action_types (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
-		name CHAR(32) UNIQUE NOT NULL
+		name CHAR(32) UNIQUE NOT NULL,
+		INDEX(name)
 	) DEFAULT CHARACTER SET utf8;`
 
 	_, err := db.Exec(sql)
