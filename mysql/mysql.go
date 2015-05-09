@@ -19,7 +19,13 @@ func Open() error {
 }
 
 func openDataBase() (*sql.DB, error) {
-	db, err := sql.Open("mysql", "root:password@"+os.Getenv("MYSQL_PORT_3306_TCP_PROTO")+"("+os.Getenv("MYSQL_PORT_3306_TCP_ADDR")+":"+os.Getenv("MYSQL_PORT_3306_TCP_PORT")+")/"+os.Getenv("DB_NAME"))
+	var query string
+	if os.Getenv("DEBUG") == "1" {
+		query = "root:@/" + os.Getenv("DB_NAME")
+	} else {
+		query = "root:password@" + os.Getenv("MYSQL_PORT_3306_TCP_PROTO") + "(" + os.Getenv("MYSQL_PORT_3306_TCP_ADDR") + ":" + os.Getenv("MYSQL_PORT_3306_TCP_PORT") + ")/" + os.Getenv("DB_NAME")
+	}
+	db, err := sql.Open("mysql", query)
 	if err != nil {
 		return nil, err
 	}
