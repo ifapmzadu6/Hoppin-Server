@@ -63,7 +63,6 @@ func closeDataBase(db *sql.DB) error {
 
 func createDataBase(db *sql.DB) error {
 	var sql = "CREATE DATABASE IF NOT EXISTS hoppin DEFAULT CHARACTER SET utf8;"
-
 	_, err := db.Exec(sql)
 	if err != nil {
 		return err

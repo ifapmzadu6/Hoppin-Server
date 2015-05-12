@@ -25,7 +25,8 @@ func createUserDevicesTable(db *sql.DB) error {
 	CREATE TABLE IF NOT EXISTS user_devices (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		name CHAR(32) NOT NULL,
-		os CHAR(32) NOT NULL
+		os CHAR(32) NOT NULL,
+		INDEX(name, os)
 	) DEFAULT CHARACTER SET utf8;`
 	_, err := db.Exec(sql)
 	if err != nil {
