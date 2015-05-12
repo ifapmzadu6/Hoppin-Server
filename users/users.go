@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/base32"
 	"io"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -23,6 +24,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		nudid, err := mysql.InsertUserDevice(device, os)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err.Error())
 			return
 		}
 		udid = nudid
@@ -32,6 +34,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	_, errt := io.ReadFull(rand.Reader, b)
 	if errt != nil {
 		http.Error(w, errt.Error(), http.StatusInternalServerError)
+		log.Println(errt.Error())
 		return
 	}
 	password := strings.TrimRight(base32.StdEncoding.EncodeToString(b), "=")
@@ -39,6 +42,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	id, erriu := mysql.InsertUser(password, udid)
 	if erriu != nil {
 		http.Error(w, erriu.Error(), http.StatusInternalServerError)
+		log.Println(erriu.Error())
 		return
 	}
 

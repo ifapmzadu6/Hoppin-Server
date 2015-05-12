@@ -2,6 +2,7 @@ package actions
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -11,12 +12,15 @@ import (
 func Handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.NotFound(w, r)
+		log.Println(r)
+		return
 	}
 
 	id := r.URL.Query().Get("user")
 	password := r.URL.Query().Get("password")
 	if err := mysql.ValidateUserByStr(id, password); err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
+		log.Println(err.Error())
 		return
 	}
 
@@ -25,6 +29,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&as)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		log.Println(err.Error())
 		return
 	}
 
@@ -36,6 +41,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			tnatnid, natnerr := mysql.InsertActionType(a.Type)
 			if natnerr != nil {
 				http.Error(w, natnerr.Error(), http.StatusBadRequest)
+				log.Println(natnerr.Error())
 				return
 			}
 			natnid = tnatnid
@@ -49,6 +55,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		err = mysql.InsertAction(na, userId)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err.Error())
 			return
 		}
 	}

@@ -13,6 +13,9 @@ import (
 
 func main() {
 
+	// Log
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+
 	// MySQL
 	err := mysql.Open()
 	if err != nil {
