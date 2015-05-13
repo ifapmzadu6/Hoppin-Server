@@ -52,11 +52,7 @@ func createActionTypeTable(db *sql.DB) error {
 	return nil
 }
 
-func InsertAction(a Action, userId int) error {
-	return insertAction(sharedDB, a, userId)
-}
-
-func insertAction(db *sql.DB, a Action, userId int) error {
+func InsertAction(db *sql.DB, a Action, userId int) error {
 	var sql = "INSERT INTO actions (video_id, type, time, start, end, user_id) value (?, ?, ?, ?, ?, ?)"
 	_, err := db.Exec(sql, a.VideoId, a.Type.Id, a.Time, a.Start, a.End, userId)
 	if err != nil {
@@ -65,11 +61,7 @@ func insertAction(db *sql.DB, a Action, userId int) error {
 	return nil
 }
 
-func InsertActionType(name string) (int64, error) {
-	return insertActionType(sharedDB, name)
-}
-
-func insertActionType(db *sql.DB, name string) (int64, error) {
+func InsertActionType(db *sql.DB, name string) (int64, error) {
 	var sql = "INSERT INTO action_types (name) value (?)"
 	r, err := db.Exec(sql, name)
 	if err != nil {
@@ -78,11 +70,7 @@ func insertActionType(db *sql.DB, name string) (int64, error) {
 	return r.LastInsertId()
 }
 
-func SelectActionTypeById(id int) (string, error) {
-	return selectActionTypeById(sharedDB, id)
-}
-
-func selectActionTypeById(db *sql.DB, id int) (string, error) {
+func SelectActionTypeById(db *sql.DB, id int) (string, error) {
 	var sql = "SELECT name FROM action_types WHERE id = ? LIMIT 1"
 	var name string
 	err := db.QueryRow(sql, id).Scan(&name)
@@ -92,11 +80,7 @@ func selectActionTypeById(db *sql.DB, id int) (string, error) {
 	return name, nil
 }
 
-func SelectActionTypeByName(name string) (int, error) {
-	return selectActionTypeByName(sharedDB, name)
-}
-
-func selectActionTypeByName(db *sql.DB, name string) (int, error) {
+func SelectActionTypeByName(db *sql.DB, name string) (int, error) {
 	var sql = "SELECT id FROM action_types WHERE name = ? LIMIT 1"
 	var id int
 	err := db.QueryRow(sql, name).Scan(&id)

@@ -35,11 +35,7 @@ func createUserDevicesTable(db *sql.DB) error {
 	return nil
 }
 
-func InsertUser(password string, device int64) (int64, error) {
-	return insertUser(sharedDB, password, device)
-}
-
-func insertUser(db *sql.DB, password string, device int64) (int64, error) {
+func InsertUser(db *sql.DB, password string, device int64) (int64, error) {
 	var sql = "INSERT INTO users (password, device) value (?, ?)"
 	r, err := db.Exec(sql, password, device)
 	if err != nil {
@@ -48,11 +44,7 @@ func insertUser(db *sql.DB, password string, device int64) (int64, error) {
 	return r.LastInsertId()
 }
 
-func SelectUser(id int64) (string, error) {
-	return selectUser(sharedDB, id)
-}
-
-func selectUser(db *sql.DB, id int64) (string, error) {
+func SelectUser(db *sql.DB, id int64) (string, error) {
 	var sql = "SELECT password FROM users WHERE id = ? LIMIT 1"
 	var password string
 	err := db.QueryRow(sql, id).Scan(&password)
@@ -62,19 +54,15 @@ func selectUser(db *sql.DB, id int64) (string, error) {
 	return password, nil
 }
 
-func ValidateUserByStr(id string, password string) error {
+func ValidateUserByStr(db *sql.DB, id string, password string) error {
 	var cid, err = strconv.Atoi(id)
 	if err != nil {
 		return err
 	}
-	return validateUser(sharedDB, int64(cid), password)
+	return ValidateUser(db, int64(cid), password)
 }
 
-func ValidateUser(id int64, password string) error {
-	return validateUser(sharedDB, id, password)
-}
-
-func validateUser(db *sql.DB, id int64, password string) error {
+func ValidateUser(db *sql.DB, id int64, password string) error {
 	var sql = "SELECT id FROM users WHERE id = ? AND password = ? LIMIT 1"
 	var tid int
 	err := db.QueryRow(sql, id, password).Scan(&tid)
@@ -84,11 +72,7 @@ func validateUser(db *sql.DB, id int64, password string) error {
 	return nil
 }
 
-func InsertUserDevice(name string, os string) (int64, error) {
-	return insertUserDevice(sharedDB, name, os)
-}
-
-func insertUserDevice(db *sql.DB, name string, os string) (int64, error) {
+func InsertUserDevice(db *sql.DB, name string, os string) (int64, error) {
 	var sql = "INSERT INTO user_devices (name, os) value (?, ?)"
 	r, err := db.Exec(sql, name, os)
 	if err != nil {
@@ -97,11 +81,7 @@ func insertUserDevice(db *sql.DB, name string, os string) (int64, error) {
 	return r.LastInsertId()
 }
 
-func SelectUserDevice(name string, os string) (int64, error) {
-	return selectUserDevice(sharedDB, name, os)
-}
-
-func selectUserDevice(db *sql.DB, name string, os string) (int64, error) {
+func SelectUserDevice(db *sql.DB, name string, os string) (int64, error) {
 	var sql = "SELECT id FROM user_devices WHERE name = ? AND os = ?"
 	var id int64
 	err := db.QueryRow(sql, name, os).Scan(&id)

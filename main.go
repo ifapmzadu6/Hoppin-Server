@@ -7,7 +7,6 @@ import (
 
 	"./actions"
 	"./index"
-	"./mysql"
 	"./users"
 )
 
@@ -16,13 +15,6 @@ func main() {
 	// Log
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
-	// MySQL
-	err := mysql.Open()
-	if err != nil {
-		panic(err)
-	}
-	defer mysql.Close()
-
 	// Routing
 	http.HandleFunc("/", index.Handler)
 	http.HandleFunc("/actions", actions.Handler)
@@ -30,12 +22,12 @@ func main() {
 
 	// Listen
 	if os.Getenv("DEBUG") == "1" {
-		err = http.ListenAndServe(":8080", nil)
+		err := http.ListenAndServe(":8080", nil)
 		if err != nil {
 			log.Fatal(err)
 		}
 	} else {
-		err = http.ListenAndServeTLS(":8080", "/ssl/cert.pem", "/ssl/key.pem", nil)
+		err := http.ListenAndServeTLS(":8080", "/ssl/cert.pem", "/ssl/key.pem", nil)
 		if err != nil {
 			log.Fatal(err)
 		}

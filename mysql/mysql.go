@@ -7,18 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-var sharedDB *sql.DB
-
-func Open() error {
-	db, err := openDataBase()
-	if err != nil {
-		return err
-	}
-	sharedDB = db
-	return nil
-}
-
-func openDataBase() (*sql.DB, error) {
+func Open() (*sql.DB, error) {
 	var query string
 	if os.Getenv("DEBUG") == "1" {
 		query = "root:@/" + os.Getenv("DB_NAME")
@@ -53,11 +42,7 @@ func openDataBase() (*sql.DB, error) {
 	return db, nil
 }
 
-func Close() error {
-	return closeDataBase(sharedDB)
-}
-
-func closeDataBase(db *sql.DB) error {
+func Close(db *sql.DB) error {
 	return db.Close()
 }
 

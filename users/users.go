@@ -17,11 +17,19 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 	}
 
+	db, dberr := mysql.Open()
+	if dberr != nil {
+		http.Error(w, dberr.Error(), http.StatusInternalServerError)
+		log.Println(dberr.Error())
+		return
+	}
+	defer mysql.Close(db)
+
 	device := r.URL.Query().Get("device")
 	os := r.URL.Query().Get("os")
-	udid, err := mysql.SelectUserDevice(device, os)
+	udid, err := mysql.SelectUserDevice(db, device, os)
 	if err != nil {
-		nudid, err := mysql.InsertUserDevice(device, os)
+		nudid, err := mysql.InsertUserDevice(db, device, os)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			log.Println(err.Error())
@@ -39,7 +47,7 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	password := strings.TrimRight(base32.StdEncoding.EncodeToString(b), "=")
 
-	id, erriu := mysql.InsertUser(password, udid)
+	id, erriu := mysql.InsertUser(db, password, udid)
 	if erriu != nil {
 		http.Error(w, erriu.Error(), http.StatusInternalServerError)
 		log.Println(erriu.Error())
