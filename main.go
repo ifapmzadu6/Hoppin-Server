@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"./actions"
-	"./index"
 	"./users"
 )
 
@@ -16,7 +15,6 @@ func main() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
 	// Routing
-	http.HandleFunc("/", index.Handler)
 	http.HandleFunc("/actions", actions.Handler)
 	http.HandleFunc("/users/signup", users.SignUpHandler)
 
