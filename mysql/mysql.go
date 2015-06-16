@@ -12,7 +12,7 @@ func Open() (*sql.DB, error) {
 	if os.Getenv("DEBUG") == "1" {
 		query = "root:@/" + os.Getenv("DB_NAME")
 	} else {
-		query = "root:password@" + os.Getenv("MYSQL_PORT_3306_TCP_PROTO") + "(" + os.Getenv("MYSQL_PORT_3306_TCP_ADDR") + ":" + os.Getenv("MYSQL_PORT_3306_TCP_PORT") + ")/" + os.Getenv("DB_NAME")
+		query = "root:" + os.Getenv("MYSQL_PASSWORD") + "@tcp(" + os.Getenv("MYSQL_ADDR") + ":3306)/" + os.Getenv("DB_NAME")
 	}
 	db, err := sql.Open("mysql", query)
 	if err != nil {
