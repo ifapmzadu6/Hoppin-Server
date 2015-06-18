@@ -2,32 +2,17 @@ package mysql
 
 import "database/sql"
 
-type Action struct {
-	Id      int
-	VideoId string
-	Type    ActionType
-	Time    int
-	Start   int
-	End     int
-	UserId  int
-}
-
-type ActionType struct {
-	Id   int64
-	Name string
-}
-
 func createActionTable(db *sql.DB) error {
 	var sql = `
 	CREATE TABLE IF NOT EXISTS actions (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
-		video_id CHAR(32) NOT NULL,
-		type INT UNSIGNED NOT NULL REFERENCES action_type(id),
+		video_id INT UNSIGNED NOT NULL REFERENCES videos(id),
+		type_id INT UNSIGNED NOT NULL REFERENCES action_type(id),
+		user_id INT UNSIGNED NOT NULL REFERENCES users(id),
 		time INT UNSIGNED NOT NULL,
 		start INT UNSIGNED NOT NULL,
 		end INT UNSIGNED NOT NULL,
-		user_id INT UNSIGNED NOT NULL REFERENCES users(id),
-		INDEX(video_id)
+		created_at DATE NOT NULL
 	) DEFAULT CHARACTER SET utf8;`
 
 	_, err := db.Exec(sql)
@@ -42,6 +27,7 @@ func createActionTypeTable(db *sql.DB) error {
 	CREATE TABLE IF NOT EXISTS action_types (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		name CHAR(32) UNIQUE NOT NULL,
+		created_at DATE NOT NULL,
 		INDEX(name)
 	) DEFAULT CHARACTER SET utf8;`
 
@@ -52,9 +38,9 @@ func createActionTypeTable(db *sql.DB) error {
 	return nil
 }
 
-func InsertAction(db *sql.DB, a Action, userId int) error {
-	var sql = "INSERT INTO actions (video_id, type, time, start, end, user_id) value (?, ?, ?, ?, ?, ?)"
-	_, err := db.Exec(sql, a.VideoId, a.Type.Id, a.Time, a.Start, a.End, userId)
+func InsertAction(db *sql.DB, videoId int64, typeId int64, userId int64, time int, start int, end int) error {
+	var sql = "INSERT INTO actions (video_id, type_id, user_id, time, start, end, created_at) value (?, ?, ?, ?, ?, ?, NOW())"
+	_, err := db.Exec(sql, videoId, typeId, userId, time, start, end)
 	if err != nil {
 		return err
 	}
@@ -62,7 +48,7 @@ func InsertAction(db *sql.DB, a Action, userId int) error {
 }
 
 func InsertActionType(db *sql.DB, name string) (int64, error) {
-	var sql = "INSERT INTO action_types (name) value (?)"
+	var sql = "INSERT INTO action_types (name, created_at) value (?, NOW())"
 	r, err := db.Exec(sql, name)
 	if err != nil {
 		return 0, err

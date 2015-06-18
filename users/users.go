@@ -2,6 +2,7 @@ package users
 
 import (
 	"crypto/rand"
+	"database/sql"
 	"encoding/base32"
 	"io"
 	"log"
@@ -15,6 +16,7 @@ import (
 func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		http.NotFound(w, r)
+		return
 	}
 
 	db, dberr := mysql.Open()
@@ -27,27 +29,29 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 
 	device := r.URL.Query().Get("device")
 	os := r.URL.Query().Get("os")
-	udid, err := mysql.SelectUserDevice(db, device, os)
-	if err != nil {
-		nudid, err := mysql.InsertUserDevice(db, device, os)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			log.Println(err.Error())
-			return
-		}
-		udid = nudid
-	}
 
-	b := make([]byte, 16)
-	_, errt := io.ReadFull(rand.Reader, b)
-	if errt != nil {
-		http.Error(w, errt.Error(), http.StatusInternalServerError)
-		log.Println(errt.Error())
+	udid, udidErr := getUserDeviceId(db, device)
+	if udidErr != nil {
+		http.Error(w, udidErr.Error(), http.StatusInternalServerError)
+		log.Println(udidErr.Error())
 		return
 	}
-	password := strings.TrimRight(base32.StdEncoding.EncodeToString(b), "=")
 
-	id, erriu := mysql.InsertUser(db, password, udid)
+	uoid, uoidErr := getUserOSId(db, os)
+	if uoidErr != nil {
+		http.Error(w, uoidErr.Error(), http.StatusInternalServerError)
+		log.Println(uoidErr.Error())
+		return
+	}
+
+	password, pwErr := getRandomPassword()
+	if pwErr != nil {
+		http.Error(w, pwErr.Error(), http.StatusInternalServerError)
+		log.Println(pwErr.Error())
+		return
+	}
+
+	id, erriu := mysql.InsertUser(db, password, udid, uoid)
 	if erriu != nil {
 		http.Error(w, erriu.Error(), http.StatusInternalServerError)
 		log.Println(erriu.Error())
@@ -56,4 +60,37 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("{\"user\":" + strconv.FormatInt(id, 10) + ", \"password\":\"" + password + "\"}\n"))
+}
+
+func getUserDeviceId(db *sql.DB, device string) (int64, error) {
+	udid, udidErr := mysql.SelectUserDevice(db, device)
+	if udidErr != nil {
+		nudid, nudidErr := mysql.InsertUserDevice(db, device)
+		if nudidErr != nil {
+			return -1, nudidErr
+		}
+		return nudid, nil
+	}
+	return udid, nil
+}
+
+func getUserOSId(db *sql.DB, os string) (int64, error) {
+	uoid, uoidErr := mysql.SelectUserOS(db, os)
+	if uoidErr != nil {
+		nuoid, nuoidErr := mysql.InsertUserOS(db, os)
+		if nuoidErr != nil {
+			return -1, nuoidErr
+		}
+		return nuoid, nil
+	}
+	return uoid, nil
+}
+
+func getRandomPassword() (string, error) {
+	b := make([]byte, 16)
+	_, err := io.ReadFull(rand.Reader, b)
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimRight(base32.StdEncoding.EncodeToString(b), "="), nil
 }
