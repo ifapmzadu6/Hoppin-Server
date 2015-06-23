@@ -8,7 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func Open() (*sql.DB, error) {
+func Connect() (*sql.DB, error) {
 	var query string
 	if os.Getenv("DEBUG") == "1" {
 		query = "root:@/" + os.Getenv("DB_NAME")
@@ -20,17 +20,30 @@ func Open() (*sql.DB, error) {
 		log.Println(err.Error())
 		return nil, err
 	}
+	return db, nil
+}
 
-	if _, err := db.Exec("USE hoppin"); err != nil {
-		log.Println(err.Error())
+func Open() (*sql.DB, error) {
+	db, err := Connect()
+	if err != nil {
 		return nil, err
 	}
-
+	if err := SelectDataBase(db); err != nil {
+		return nil, err
+	}
 	return db, nil
 }
 
 func Close(db *sql.DB) error {
 	return db.Close()
+}
+
+func SelectDataBase(db *sql.DB) error {
+	if _, err := db.Exec("USE hoppin"); err != nil {
+		log.Println(err.Error())
+		return err
+	}
+	return nil
 }
 
 func CreateDataBase(db *sql.DB) error {
