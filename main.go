@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/handlers"
+
 	"./actions"
 	"./mysql"
 	"./users"
@@ -27,12 +29,12 @@ func main() {
 
 	// Listen
 	if os.Getenv("DEBUG") == "1" {
-		err := http.ListenAndServe(":8080", nil)
+		err := http.ListenAndServe(":8080", handlers.LoggingHandler(os.Stdout, http.DefaultServeMux))
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(err.Error())
 		}
 	} else {
-		err := http.ListenAndServeTLS(":8080", "/ssl/cert.pem", "/ssl/key.pem", nil)
+		err := http.ListenAndServeTLS(":8080", "/ssl/cert.pem", "/ssl/key.pem", handlers.LoggingHandler(os.Stdout, http.DefaultServeMux))
 		if err != nil {
 			log.Fatal(err.Error())
 		}
