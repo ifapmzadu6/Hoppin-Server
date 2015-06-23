@@ -46,10 +46,11 @@ func setupMySQL() error {
 		return dbErr
 	}
 	defer mysql.Close(db)
-	if err := mysql.SelectDataBase(db); err != nil {
+
+	if err := mysql.CreateDataBase(db); err != nil {
 		return err
 	}
-	if err := mysql.CreateDataBase(db); err != nil {
+	if err := mysql.SelectDataBase(db); err != nil {
 		return err
 	}
 	if err := mysql.CreateTables(db); err != nil {
