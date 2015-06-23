@@ -12,7 +12,7 @@ func createUsersTable(db *sql.DB) error {
 		password CHAR(32) NOT NULL,
 		device INT UNSIGNED REFERENCES user_devices(id),
 		os INT UNSIGNED REFERENCES user_oss(id),
-		created_at DATE NOT NULL,
+		created_at DATETIME NOT NULL,
 		INDEX(password)
 	) DEFAULT CHARACTER SET utf8;`
 	_, err := db.Exec(sql)

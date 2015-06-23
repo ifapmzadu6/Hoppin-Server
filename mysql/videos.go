@@ -8,7 +8,7 @@ func createVideosTable(db *sql.DB) error {
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		name CHAR(32) NOT NULL,
 		type INT UNSIGNED REFERENCES video_types(id),
-		created_at DATE NOT NULL,
+		created_at DATETIME NOT NULL,
 		INDEX(name)
 	) DEFAULT CHARACTER SET utf8;`
 	_, err := db.Exec(sql)
@@ -23,7 +23,7 @@ func createVideoTypesTable(db *sql.DB) error {
 	CREATE TABLE IF NOT EXISTS video_types (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		name CHAR(32) NOT NULL,
-		created_at DATE NOT NULL,
+		created_at DATETIME NOT NULL,
 		INDEX(name)
 	) DEFAULT CHARACTER SET utf8;`
 	_, err := db.Exec(sql)

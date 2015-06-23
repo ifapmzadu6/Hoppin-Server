@@ -12,7 +12,7 @@ func createActionTable(db *sql.DB) error {
 		time INT UNSIGNED NOT NULL,
 		start INT UNSIGNED NOT NULL,
 		end INT UNSIGNED NOT NULL,
-		created_at DATE NOT NULL
+		created_at DATETIME NOT NULL
 	) DEFAULT CHARACTER SET utf8;`
 
 	_, err := db.Exec(sql)
@@ -27,7 +27,7 @@ func createActionTypeTable(db *sql.DB) error {
 	CREATE TABLE IF NOT EXISTS action_types (
 		id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		name CHAR(32) UNIQUE NOT NULL,
-		created_at DATE NOT NULL,
+		created_at DATETIME NOT NULL,
 		INDEX(name)
 	) DEFAULT CHARACTER SET utf8;`
 

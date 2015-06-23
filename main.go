@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"./actions"
+	"./mysql"
 	"./users"
 )
 
@@ -13,6 +14,12 @@ func main() {
 
 	// Log
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+
+	// MySQL
+	if err := setupMySQL(); err != nil {
+		log.Fatal(err.Error())
+		return
+	}
 
 	// Routing
 	http.HandleFunc("/actions", actions.Handler)
@@ -27,8 +34,22 @@ func main() {
 	} else {
 		err := http.ListenAndServeTLS(":8080", "/ssl/cert.pem", "/ssl/key.pem", nil)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(err.Error())
 		}
 	}
 
+}
+
+func setupMySQL() error {
+	db, dbErr := mysql.Open()
+	if dbErr != nil {
+		return dbErr
+	}
+	if err := mysql.CreateDataBase(db); err != nil {
+		return err
+	}
+	if err := mysql.CreateTables(db); err != nil {
+		return err
+	}
+	return nil
 }
