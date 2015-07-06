@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/handlers"
 
 	"./actions"
-	"./histgrams"
+	"./histograms"
 	"./mysql"
 	"./users"
 )
@@ -27,7 +27,7 @@ func main() {
 	// Routing
 	http.HandleFunc("/actions", actions.Handler)
 	http.HandleFunc("/users/signup", users.SignUpHandler)
-	http.HandleFunc("/videos/histogram", histgrams.Handler)
+	http.HandleFunc("/videos/histogram", histograms.Handler)
 
 	// Listen
 	if os.Getenv("DEBUG") == "1" {

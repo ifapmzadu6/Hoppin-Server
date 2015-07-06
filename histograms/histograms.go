@@ -1,4 +1,4 @@
-package histgrams
+package histograms
 
 import (
 	"database/sql"
